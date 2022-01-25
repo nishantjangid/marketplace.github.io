@@ -1,0 +1,25 @@
+.HeroSectionSliderImage{
+    width: 100%;
+    height: 90%;
+    padding: 0px !important;
+    margin-top: 25px;
+    border-radius: 20px !important;
+    overflow: hidden;
+    flex:1 auto;
+    overflow: hidden;
+}
+.HeroSectionImage{
+    flex:1 1 auto;
+    width: 200px;
+    height: 200px;
+    padding: 0px !important;
+    margin: 10px;
+    border-radius: 20px !important;
+    overflow: hidden;
+    position: relative;
+    transition:transform 0.5s ease-in-out;
+}
+.HeroSectionImage:hover img{
+    transition:transform 0.5s ease-in-out;
+    transform: scale(1.1);
+}
