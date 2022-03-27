@@ -8,7 +8,9 @@ function connectDB(){
 
     connection.once('open', () => {
         console.log('Database connected')
-    })
+    }).on('error', function (err) {
+        console.log(err);
+    });
 }
 
 module.exports = connectDB;

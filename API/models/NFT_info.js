@@ -26,6 +26,19 @@ const nftInfo = new Schema({
     royalities : {
         type : Number,
         required : false
+    },
+    ownerAddress : {
+        type : String,
+        required : true
+    },
+    creatorAddress : {
+        type : String,
+        required : true
+    },
+    resell:{
+        type:Number,
+        require:true,
+        default:"1"
     }
 }, {timestamp : true});
 
