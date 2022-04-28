@@ -39,7 +39,7 @@ const nftInfo = new Schema({
         type:Number,
         require:true,
         default:"1"
-    }
-}, {timestamp : true});
+    },
+}, {timestamps : { createdAt: 'created_on', updatedAt: 'updated_on' }});
 
 module.exports = mongoose.model('NFT', nftInfo);

@@ -4,20 +4,22 @@ import { Box } from '@mui/system';
 import { useWeb3React } from '@web3-react/core';
 import { ToastContainer, toast } from 'react-toastify';
 import axios, { Axios } from 'axios';
-
+import { API_URL } from '../utils/Constant';
 import 'react-toastify/dist/ReactToastify.css';
 import { ethers } from 'ethers';
 import { ContractAddress, initiateContract } from '../utils/ContractInfo';
 import { LoadingButton } from '@mui/lab';
+import { useSelector } from 'react-redux';
 const inputStyle = {
     "width": "100%",
     "marginBottom": "1rem"
 }
 const Mint = () => {
     const { connector, library, chainId, account, activate, deactivate, active, error } = useWeb3React();
-
     const [loading, setLoading] = useState(false);
     const [activatingConnector, setActivatingConnector] = useState()
+    const accountInfo = useSelector(state => state.accountInfo);    
+    
     useEffect(() => {
         if (activatingConnector && activatingConnector === connector) {
             setActivatingConnector(undefined)
@@ -54,18 +56,14 @@ const Mint = () => {
 
             try{
 
-                let contract = await initiateContract(window.ethereum);
-                const provider = await new ethers.providers.Web3Provider(window.ethereum);
-                const signer = await provider.getSigner();
-                let tokenURI = "http://localhost:8000/uploads/";
+                let tokenURI = `${API_URL}/uploads/`;
                 let value = await ethers.utils.parseEther(price);
-                let tokenID = Math.floor(Math.random() * 10000000000000);
-                let state = 0;
+                let tokenID = Math.floor(Math.random() * 10000000000000);                
                 let paymentCurrency = ContractAddress;      
                 setLoading(true);
-                await signer.signMessage("For Create NFT",paymentCurrency,value);
+                await accountInfo.contract.signer.signMessage("For Create NFT",paymentCurrency,value);
                 
-                let confirmTransaction = await contract.mintNFT(tokenURI,value,tokenID,state,paymentCurrency);
+                let confirmTransaction = await accountInfo.contract.mintNFT(tokenURI,0,tokenID,false,value,paymentCurrency,royalities);
                 await confirmTransaction.wait();
 
                 var data = new FormData();
@@ -75,8 +73,9 @@ const Mint = () => {
                 data.append("royalities",royalities);
                 data.append("image",image);
                 data.append("tokenId",tokenID);
+                data.append("address",account);
 
-                axios.post("http://localhost:8000/nft/add",data,{
+                axios.post(`${API_URL}/nft/add`,data,{
                     headers:{
                         'Content-Type': 'multipart/form-data'
                     }
@@ -106,7 +105,7 @@ const Mint = () => {
 
     }
     return (
-        <Container maxWidth="sm">
+        <Container maxWidth="sm" style={{"marginTop":"7rem"}}>
             <ToastContainer/>
             {/* Same as */}
             <ToastContainer />
@@ -116,8 +115,8 @@ const Mint = () => {
                 </Typography>
                 <TextField fullWidth style={inputStyle} type="text" id="standard-basic" label="Name" name="name" variant="standard" required />
                 <TextField fullWidth style={inputStyle} type="text"  label="Description" name="description" variant="standard" required />
-                <TextField fullWidth style={inputStyle} type="number"  label="Royalities" name="royalities" variant="standard" />
-                <TextField fullWidth style={inputStyle} type="number"  label="Price" name="price" variant="standard" required />
+                <TextField fullWidth style={inputStyle} type="number" inputProps={{maxLength: 3,step: "1"}}  label="Royalities" name="royalities" variant="standard" />
+                <TextField fullWidth style={inputStyle} type="number"  inputProps={{maxLength: 13,step: "any"}}  label="Price" name="price" variant="standard" required />
                 <TextField fullWidth style={inputStyle} type="file" name="image" />
                 <Box component="div" sx={{ "textAlign": "center", mt: 1 }}>                
                     <LoadingButton type="submit" variant="contained" loading={loading} loadingPosition="center">Mint</LoadingButton>

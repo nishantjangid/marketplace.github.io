@@ -25,8 +25,7 @@ router.post("/add", (req, res) => {
     // store file
     upload(req, res, async (err) => {
 
-        try {
-            console.log(req);
+        try {            
             // validate request
             if (!req.file) {
                 return res.status(404).json({ code: 500, message: "All fields are required." });
@@ -44,8 +43,9 @@ router.post("/add", (req, res) => {
                 ownerAddress: req.body.address,
                 creatorAddress: req.body.address,
             });
+            
 
-            const response = await nft.save();
+            const response = await nft.save();           
             return res.status(200).json({ code: 200, message: "NFT Created successfully" });
         } catch (err) {
             return res.status(200).json({ code: 500, message: err.message });
@@ -83,10 +83,23 @@ router.get("/get-all/", async (req, res) => {
 
 })
 
+// GET THE RECENT NFTs
+router.get("/get-recents/", async (req, res) => {
+    try {
+        const OneNFT = await NFT.find().sort({_id: -1});
+
+        if (!OneNFT) return res.status(500).json({ code:500,message: "No NFT found!" });
+
+        return res.status(200).json({ code: 200, message: OneNFT });
+    } catch (err) {
+        return res.status(500).json({ code:500,message: err.message });
+    }    
+})
+
 // CHANGE OWNER AFTER BUYING NFT    
 router.post("/changeOwner", async (req, res) => {
     // store file    
-    console.log(req.body);
+    
     if(!req.body) return res.status(500).json({code:500,message:"Please provider required parameters"});
     const response = await NFT.updateOne(
         { tokenId: req.body.tokenID },
@@ -99,6 +112,21 @@ router.post("/changeOwner", async (req, res) => {
         );
     console.log(response);
     return res.status(200).json({ code: 200, message: "Buy NFT successfully" });        
+})
+
+router.post("/resell",async (req,res)=>{
+    console.log(req.body);
+    if(!req.body) return res.status(500).json({code:500,message:"Please provider required parameters"});
+    const response = await NFT.updateOne(
+        { tokenId: req.body.tokenID },
+        { $set:
+            {
+                resell: req.body.resell,            
+                price: req.body.price                
+            }
+        }
+        );     
+    return res.status(200).json({ code: 200, message: "Resell successfully" });
 })
 
 module.exports = router;

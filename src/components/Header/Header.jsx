@@ -3,6 +3,8 @@ import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
 
 import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -17,6 +19,74 @@ import { Link } from 'react-router-dom';
 import { TextFields } from '@mui/icons-material';
 import ConnectButtonModal from '../ConnectButtonModal';
 import { useWeb3React } from '@web3-react/core';
+import { makeStyles } from "@mui/styles"
+const useStyles = makeStyles((theme) => ({
+    logoLg: {
+        display: "none",
+        [theme.breakpoints.up("sm")]: {
+            display: "block",
+        },
+    },
+    logoSm: {
+        display: "block",
+        [theme.breakpoints.up("sm")]: {
+            display: "none",
+        }
+    },
+    menuButton: {
+        display: "none !important",
+        [theme.breakpoints.down("md")]: {
+            display: "block !important",
+        }
+    },
+    searchSm: {
+        display: "block !important",
+        [theme.breakpoints.down("md")]: {
+            display: "none !important",
+        }
+    },
+    menus: {
+         display: 'flex', alignItems: 'center', textAlign: 'center', "cursor": "pointer",
+        [theme.breakpoints.down("md")]: {
+            display: "none !important",
+            fontSize:"2rem !important",
+        }
+    },
+    headerResponsive: {
+        display: 'flex',
+        alignItems: 'center',
+        textAlign: 'center', 'justifyContent': 'space-around', "zIndex": "200",
+        padding: "1rem 0",        
+        width:"100vw",
+        position:"fixed",
+        top:"0rem",
+        background: "#fff",
+        [theme.breakpoints.down("md")]: {
+            justifyContent: "space-between !important",
+            height:"10vh",                        
+        }
+    },
+    MobileSearch: {
+        display: "none !important",
+        [theme.breakpoints.down("md")]: {
+            display: "block !important",
+        }
+    },
+    MobileHeader: {
+        display: "none",
+        [theme.breakpoints.down("md")]: {
+            display: "block",
+            height:"90vh",
+            width:"100%",
+            background:"#fff",
+            position:"fixed",   
+            // top:"3rem",
+            "zIndex":"30000",
+            "textAlign":"left",            
+        }
+    },
+}));
+
 const StyledMenu = styled((props) => (
     <Menu
         elevation={0}
@@ -101,8 +171,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const Header = () => {
-    const {connector, library, chainId, account, activate, deactivate, active, error} = useWeb3React();   
+    const classes = useStyles();
+    const { connector, library, chainId, account, activate, deactivate, active, error } = useWeb3React();
     const [anchorEl, setAnchorEl] = useState(null);
+    const [hideMenu, setHideMenu] = useState(false);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -113,40 +185,58 @@ const Header = () => {
 
     async function disconnect() {
         try {
-          deactivate()
+            deactivate()
         } catch (ex) {
-          console.log(ex)
+            console.log(ex)
         }
-    }    
-    return (
-        <Container maxWidth="xl">
-            <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' ,'justifyContent':'space-around'}}>
-            <Link   to="/" style={{"textDecoration":"none","color":"inherit"}}>
+    }
 
-                <Avatar
-                    alt="Remy Sharp"
-                    src="/static/images/avatar/1.jpg"
-                    sx={{ width: 56, height: 56 }}
-                />
-            </Link>
-                <Search>
+    const mobileMenu = async () => {
+        if(hideMenu){
+            setHideMenu(false);
+        }else{
+            setHideMenu(true);
+        }
+    }
+    return (
+        <Box component="div">
+            <Box className={classes.headerResponsive}>
+                <Link to="/" style={{ "textDecoration": "none", "color": "inherit" }}>
+                    <Box component="div" className={classes.logoLg}>
+                        <Avatar
+                            alt="Remy Sharp"
+                            src="/static/images/avatar/1.jpg"
+                            sx={{ "height": "56px", "width": "56px" }}
+                        />
+                    </Box>
+                    <Box component="div" className={classes.logoSm}>
+                        <Avatar
+                            alt="Remy Sharp"
+                            src="/static/images/avatar/1.jpg"
+                            sx={{ "height": "36px", "width": "36px" }}
+                        />
+                    </Box>
+                </Link>
+
+                <Search className={classes.searchSm}>
                     <SearchIconWrapper>
                         <SearchIcon />
                     </SearchIconWrapper>
                     <StyledInputBase
                         placeholder="Search…"
                         inputProps={{ 'aria-label': 'search' }}
-                        style={{"borderRadius":"20px","border":"none","backgroundColor":"rgba(4, 4, 5, 0.07)",'color':'rgb(110, 110, 110)'}}
+                        style={{ "borderRadius":
+                         "20px", "border": "none", "backgroundColor": "rgba(4, 4, 5, 0.07)", 'color': 'rgb(110, 110, 110)' }}
                     />
                 </Search>
-                <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center',"cursor":"pointer" }}>
+                <Box className={classes.menus} >
                     <Typography
                         style={{ "backgroundImage": ButtonColor + " !important" }}
                         id="demo-customized-button"
                         aria-controls={open ? 'demo-customized-menu' : undefined}
                         aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}                        
-                        
+                        aria-expanded={open ? 'true' : undefined}
+
                         onClick={handleClick}
                         endicon={<KeyboardArrowDownIcon />}
                     >
@@ -172,36 +262,127 @@ const Header = () => {
                         </MenuItem>
                     </StyledMenu>
                     <Typography sx={{ minWidth: 100 }}>
-                    <Link   to="/item" style={{"textDecoration":"none","color":"inherit"}}>
-                        My Profile
-                    </Link>
+                        <Link to="/item" style={{ "textDecoration": "none", "color": "inherit" }}>
+                            My Profile
+                        </Link>
                     </Typography>
                     <Typography sx={{ minWidth: 100 }}>Following</Typography>
                     <Typography sx={{ minWidth: 100 }}>Activity</Typography>
                     <Typography sx={{ minWidth: 100 }}>How it works</Typography>
                     <Typography
-                        style={{ "backgroundImage": ButtonColor + " !important","marginLeft":"1rem","cursor":"pointer" }}
+                        style={{ "backgroundImage": ButtonColor + " !important", "marginLeft": "1rem", "cursor": "pointer" }}
                         id="demo-customized-button"
                         aria-controls={open ? 'demo-customized-menu' : undefined}
                         aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}                        
-                        
+                        aria-expanded={open ? 'true' : undefined}
+
                         onClick={handleClick}
                         endicon={<KeyboardArrowDownIcon />}
                     >
                         Community
                     </Typography>
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center'}}>
-                <Link   to="/mint" style={{"textDecoration":"none","color":"inherit"}}>
-                    <Button variant="contained" style={{"marginRight":"1rem"}}>Create</Button>
-                </Link>
+                <Box className={classes.menus} >
+                    <Link to="/mint" style={{ "textDecoration": "none", "color": "inherit" }}>
+                        <Button variant="contained" style={{ "marginRight": "1rem" }}>Create</Button>
+                    </Link>
                     <ConnectButtonModal />
-                     {active && <Button variant='container' style={{"color":"#fff"}} onClick={()=>disconnect()}>Disconnect</Button>}
-                    
+                    {active && <Button variant='container' style={{ "color": "#fff" }} onClick={() => disconnect()}>Sign out</Button>}
+
                 </Box>
+
+                {/* Mobile Menu */}
+                <Box component="div" className={classes.MobileSearch}>
+                    {/* <SearchIconWrapper>
+                        <SearchIcon />
+                    </SearchIconWrapper> */}
+                    <StyledInputBase
+                        placeholder="Search…"
+                        inputProps={{ 'aria-label': 'search' }}
+                        style={{ "borderRadius": "20px", "border": "none", "backgroundColor": "rgba(4, 4, 5, 0.07)", 'color': 'rgb(110, 110, 110)' }}
+                    />
+                </Box>
+                <Box component="div" className={classes.menuButton}>
+                    <IconButton
+
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="open drawer"
+                        sx={{ "background": "transparent",p:0 }}
+                        onClick={()=>mobileMenu()}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                </Box>
+                {/* Mobile Menu */}
             </Box>
-        </Container>
+            {hideMenu && (
+            <Box className={classes.MobileHeader}>
+                <Box sx={{ display: 'flex',"cursor": "pointer", "flexDirection": "column" }}>
+                    <Typography
+                        style={{ "backgroundImage": ButtonColor + " !important" }}
+                        id="demo-customized-button"
+                        aria-controls={open ? 'demo-customized-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+
+                        onClick={handleClick}
+                        endicon={<KeyboardArrowDownIcon />}
+                    >
+                        Explore
+                    </Typography>
+                    <StyledMenu
+                        id="demo-customized-menu"
+                        MenuListProps={{
+                            'aria-labelledby': 'demo-customized-button',
+                        }}
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                    >
+                        <MenuItem onClick={handleClose} disableRipple>
+                            All
+                        </MenuItem>
+                        <MenuItem onClick={handleClose} disableRipple>
+                            Ethereum
+                        </MenuItem>
+                        <MenuItem onClick={handleClose} disableRipple>
+                            Flow
+                        </MenuItem>
+                    </StyledMenu>
+                    <Typography sx={{ minWidth: 100 }}>
+                        <Link to="/item" style={{ "textDecoration": "none", "color": "inherit" }}>
+                            My Profile
+                        </Link>
+                    </Typography>
+                    <Typography sx={{ minWidth: 100 }}>Following</Typography>
+                    <Typography sx={{ minWidth: 100 }}>Activity</Typography>
+                    <Typography sx={{ minWidth: 100 }}>How it works</Typography>
+                    <Typography
+                        style={{ "backgroundImage": ButtonColor + " !important", "marginLeft": "1rem", "cursor": "pointer" }}
+                        id="demo-customized-button"
+                        aria-controls={open ? 'demo-customized-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+
+                        onClick={handleClick}
+                        endicon={<KeyboardArrowDownIcon />}
+                    >
+                        Community
+                    </Typography>
+                </Box>
+                <Box className={classes.menus} >
+                    <Link to="/mint" style={{ "textDecoration": "none", "color": "inherit" }}>
+                        <Button variant="contained" style={{ "marginRight": "1rem" }}>Create</Button>
+                    </Link>
+                    <ConnectButtonModal />
+                    {active && <Button variant='container' style={{ "color": "#fff" }} onClick={() => disconnect()}>Sign out</Button>}
+
+                </Box>                
+            </Box>
+            )}
+        </Box>
     )
 }
 

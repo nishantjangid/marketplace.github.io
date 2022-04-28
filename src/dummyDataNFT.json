@@ -1,0 +1,28 @@
+[
+    {
+        "_id": "623611e5dd0ed6617bbebe41",
+        "name": "Nishant",
+        "description": "description of  my nft",
+        "path": "/uploads/1647710693170-233996059.png",
+        "tokenId": "1775608675696",
+        "price": 2,
+        "royalities": 2,
+        "ownerAddress": "0xA809414A71d6ca396052b717f70932d0e003A1B8",
+        "creatorAddress": "0xA809414A71d6ca396052b717f70932d0e003A1B8",
+        "resell": 1,
+        "__v": 0
+    },
+    {
+        "_id": "624045e90af9452d865f1ac7",
+        "name": "Holo NFT",
+        "description": "description of my HOLO nft",
+        "path": "/uploads/1648379368736-606599322.jpg",
+        "tokenId": "8564471813123",
+        "price": 0.009998,
+        "royalities": 3,
+        "ownerAddress": "0xac672e1056d3dd53965be775F387C8C54EC1089f",
+        "creatorAddress": "0xA809414A71d6ca396052b717f70932d0e003A1B8",
+        "resell": 1,
+        "__v": 0
+    }
+]

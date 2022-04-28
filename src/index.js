@@ -6,6 +6,10 @@ import reportWebVitals from './reportWebVitals';
 import {TransactionProvider} from "./context/TransactionContext";
 import { Web3Provider } from '@ethersproject/providers';
 import { Web3ReactProvider } from '@web3-react/core';
+import { createTheme } from '@mui/material';
+import { ThemeProvider } from '@mui/styles';
+import store from './redux/store';  
+import {Provider} from "react-redux";
 
 function getLibrary(provider) {
   const library = new Web3Provider(provider)
@@ -13,12 +17,30 @@ function getLibrary(provider) {
   return library
 }
 
+const theme = createTheme({
+  
+})
+theme.typography.h3 = {
+  fontSize: '1.2rem',
+  
+  '@media (min-width:600px)': {
+      fontSize: '1.5rem',
+  },
+  [theme.breakpoints.up('md')]: {
+      fontSize: '2.4rem',
+  },
+};
+
 ReactDOM.render(
   <TransactionProvider >
   <Web3ReactProvider getLibrary={getLibrary}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
+    <Provider store={store}>
+      <React.StrictMode>
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+      </React.StrictMode>
+    </Provider>
     </Web3ReactProvider>
   </TransactionProvider>,
   document.getElementById('root')
