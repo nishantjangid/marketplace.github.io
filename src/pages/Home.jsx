@@ -51,7 +51,8 @@ const Home = () => {
         setRecentLoading(true);        
             await axios.get(`${API_URL}/nft/get-recents/`,{
                 headers:{
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
                 }
             })
             .then(response =>{

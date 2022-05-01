@@ -70,7 +70,8 @@ const Cards = ({ data, type }) => {
         const json = JSON.stringify({ resell: 1,tokenID:tokenID,price:price });
         axios.post(`${API_URL}/nft/resell`, json, {
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
           }
         })
           .then(response => {

@@ -21,12 +21,12 @@ const nftUser = new Schema({
     image : {
         type : String,
         required : false,
-        default: ""
+        default: "/uploads/1651233675869-155047266.gif"
     },
     coverImage : {
         type : String,
         required : false,
-        default: ""
+        default: "/uploads/1651233675869-155047266.gif"
     },
     address : {
         type : String,

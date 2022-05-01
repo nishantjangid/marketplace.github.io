@@ -65,65 +65,60 @@ const ConnectButtonModal = () => {
     }
   }
 
-  useEffect(() => {
+  // INITIALIZE VALUES WHEN WALLET CONNECT
+  const initial = async () => {
 
-    // INITIALIZE VALUES WHEN WALLET CONNECT
-    const initial = async () => {
+    if (active === true) {
 
+      const provider = await new ethers.providers.Web3Provider(library.provider);
+      const signer = await provider.getSigner();
+      const contract = await new ethers.Contract(ContractAddress, ABI, signer);
+      let a = {
+        account,
+        connector,
+        chainId,
+        walletType,
+        contract
+      }
+      dispatch(accountInfos(a));
+    } else {
+      console.log("Err Something went wrong");
+    }
+  }
+  
+  // INSERT USER  WHEN CONNECT
+  const insertUser = () => {
+    try {
       if (active === true) {
 
-        const provider = await new ethers.providers.Web3Provider(library.provider);
-        const signer = await provider.getSigner();
-        const contract = await new ethers.Contract(ContractAddress, ABI, signer);
-        let a = {
-          account,
-          connector,
-          chainId,
-          walletType,
-          contract
-        }
-        dispatch(accountInfos(a));
-      } else {
-        console.log("Err Something went wrong");
-      }
-    }
+        const json = JSON.stringify({ "name": "Default_name", "address": account });
+        axios.post(`${API_URL}/nft/addNewUser`, json, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          }
+        })
+          .then(response => {
 
-    initial();
+            if (response.data.message) {
 
+            }
+            if (response.data.error) {
 
-    // INSERT USER  WHEN CONNECT
-    const insertUser = () => {
-      try {
-        if (active === true) {
-
-          const json = JSON.stringify({ "name": "Default_name", "address": account });
-          axios.post(`${API_URL}/nft/addNewUser`, json, {
-            headers: {
-              'Content-Type': 'application/json'
             }
           })
-            .then(response => {
-
-              if (response.data.message) {
-
-              }
-              if (response.data.error) {
-
-              }
-            })
-            .catch(err => {
-              // console.log(err);
-            });
-        }
-      } catch (err) {
-        setLoading(false);
-        toast.error(err.message);
+          .catch(err => {
+            // console.log(err);
+          });
       }
+    } catch (err) {
+      setLoading(false);
+      toast.error(err.message);
     }
+  }
+  useEffect(() => {
+    initial();
     insertUser();
-
-
-
   }, [account,walletType]);
 
 

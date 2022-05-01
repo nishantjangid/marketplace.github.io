@@ -81,7 +81,8 @@ const Details = () => {
     
             await axios.get(`${API_URL}/nft/get-one/${id}`,{
                 headers:{
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
                 }
             })
             .then(async(response) =>{                   
@@ -101,7 +102,8 @@ const Details = () => {
                         const json = JSON.stringify({ resell: 0,tokenID:response.data.message.tokenId,address:account });
                         axios.post(`${API_URL}/nft/changeOwner`,json,{
                             headers:{
-                                'Content-Type': 'application/json'
+                                'Content-Type': 'application/json',
+                                'Access-Control-Allow-Origin': '*',
                             }
                         })
                         .then(response =>{

@@ -78,7 +78,8 @@ const EditProfile = () => {
 
             axios.post(`${API_URL}/nft/addUser`,data,{
                 headers:{
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data',
+                    'Access-Control-Allow-Origin': '*',
                 }
             })
             .then(response=>{
@@ -128,7 +129,8 @@ useEffect(async ()=>{
     if(active === true){
         await axios.get(`${API_URL}/nft/userDetails/${account}`,{
             headers:{
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
             }
         })
         .then(response =>{
