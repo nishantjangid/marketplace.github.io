@@ -138,8 +138,8 @@ const Details = () => {
         setValue(newValue);
     };
 
-    useEffect(async()=>{
-       await axios.get(`${API_URL}/nft/get-one/${nftID}`,{
+    const getNFTdetails = async () => {
+        await axios.get(`${API_URL}/nft/get-one/${nftID}`,{
             headers:{
                 'Content-Type': 'application/json'
             }
@@ -155,12 +155,15 @@ const Details = () => {
         .catch((err)=>{
             console.log(err);
         });
+    }
 
+    useEffect(async()=>{
+        getNFTdetails();
     },[]);    
 
   return (
       <Container maxWidth="lg" sx={{"padding":"2rem 0","marginTop":"7rem"}}>
-      <ToastContainer/>
+      
       {nfts.map(nft => 
             (<Grid container spacing={2} key={nft._id}>
                 <Grid  item lg={6} md={6} xs={12} sx={{"width":"100%","height":"100%","padding":"2rem"}}>

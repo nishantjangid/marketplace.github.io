@@ -14,6 +14,20 @@ import Skeleton from '../components/Skeleton/Skeleton';
 import { ToastContainer } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import SigninRequest from '../components/SigninRequest';
+import { makeStyles } from '@mui/styles';
+const useStyles = makeStyles((theme) => ({
+    itemCard: {
+        rowGap: "1rem",
+        columnGap: "1.5rem",
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        flex: "1 1 auto", 
+        [theme.breakpoints.up("sm")]: {
+
+        },
+    },
+}));
 const EditBanner = { "marginTop": "10px", "width": "100%", "objectFit": "cover","background": "rgb(34,193,195)","background": "linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%)", "height": "250px", "borderRadius": "20px", "position": "relative", }
 const ProfilePic = {
     "width": "200px",
@@ -33,6 +47,8 @@ const ProfilePic = {
 const userAddress = { "verticalAlign": "center", "alignItems": "center", "borderRadius": "20px", "background": "rgba(4, 4, 5, 0.04)", "padding": "8px", "display": "inline", "fontSize": "0.9rem", "fontWeight": "bolder", "color": "rgb(110, 110, 110)" }
 
 const TabStyle = { "border": "none !important", "borderRadius": "0px !important", "background": "transparent", "color": "#000 !important", "fontWeight": "bold !important" }
+
+const itemCard = {};
 
 TabPanel.propTypes = {
     children: PropTypes.node,
@@ -69,6 +85,7 @@ function TabPanel(props) {
 
 
 const Item = () => {
+    const classes = useStyles();
     const [showBtn, setShowBtn] = useState(false);
     const [value, setValue] = React.useState(0);
     const [onSale, setOnSale] = React.useState([]);
@@ -185,7 +202,7 @@ const Item = () => {
             {
                 active === true ?
                     <Container maxWidth="xl" style={{ "marginTop": "7rem" }}>
-                        <ToastContainer />
+                        
                         {
                             userDetail.length > 0 ?
                                 userDetail.map((e)=>
@@ -229,7 +246,7 @@ const Item = () => {
                                                     </Tabs>
                                                 </Box>
                                                 <TabPanel value={value} index={0}>
-                                                    <Box component="div" sx={{ "rowGap": "1rem", "columnGap": "1.5rem", "display": "flex", "flexDirection": "row", "flexWrap": "wrap", "flex": "1 1 auto" }}>
+                                                    <Box component="div" className={classes.itemCard}>
                                                         {saleLoading ? Array(8).fill(<Skeleton />)
                                                             :
                                                             onSale.map(e => <Cards data={e} key={e._id} type={"onsale"} />)
@@ -237,7 +254,7 @@ const Item = () => {
                                                     </Box>
                                                 </TabPanel>
                                                 <TabPanel value={value} index={1}>
-                                                    <Box component="div" sx={{ "rowGap": "1rem", "columnGap": "1.5rem", "display": "flex", "flexDirection": "row", "flexWrap": "wrap", "flex": "1 1 auto" }}>
+                                                    <Box component="div" className={classes.itemCard}>
                                                         {ownedLoading ? Array(8).fill(<Skeleton />)
                                                             :
                                                             owned.map(e => <Cards data={e} key={e._id} type={"owned"} />)
@@ -245,7 +262,7 @@ const Item = () => {
                                                     </Box>
                                                 </TabPanel>
                                                 <TabPanel value={value} index={2}>
-                                                    <Box component="div" sx={{ "rowGap": "1rem", "columnGap": "1.5rem", "display": "flex", "flexDirection": "row", "flexWrap": "wrap", "flex": "1 1 auto" }}>
+                                                    <Box component="div" className={classes.itemCard}>
                                                         {createdLoading ? Array(8).fill(<Skeleton />)
                                                             :
                                                             created.map(e => <Cards data={e} key={e._id} type={"onsale"} />)
@@ -253,12 +270,12 @@ const Item = () => {
                                                     </Box>
                                                 </TabPanel>
                                                 <TabPanel value={value} index={3}>
-                                                    <Box component="div" sx={{ "rowGap": "1rem", "columnGap": "1.5rem", "display": "flex", "flexDirection": "row", "flexWrap": "wrap", "flex": "1 1 auto" }}>
+                                                    <Box component="div" className={classes.itemCard}>
                                                         <Skeleton />
                                                     </Box>
                                                 </TabPanel>
                                                 <TabPanel value={value} index={4}>
-                                                    <Box component="div" sx={{ "rowGap": "1rem", "columnGap": "1.5rem", "display": "flex", "flexDirection": "row", "flexWrap": "wrap", "flex": "1 1 auto" }}>
+                                                    <Box component="div" className={classes.itemCard}>
                                                         {/* <Cards />
                                         <Cards />
                                         <Cards />

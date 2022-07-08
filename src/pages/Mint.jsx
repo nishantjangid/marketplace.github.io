@@ -4,22 +4,23 @@ import { Box } from '@mui/system';
 import { useWeb3React } from '@web3-react/core';
 import { ToastContainer, toast } from 'react-toastify';
 import axios, { Axios } from 'axios';
-import { API_URL } from '../utils/Constant';
-import 'react-toastify/dist/ReactToastify.css';
+import { API_URL, CHAINID } from '../utils/Constant';
+
 import { ethers } from 'ethers';
 import { ContractAddress, initiateContract } from '../utils/ContractInfo';
 import { LoadingButton } from '@mui/lab';
 import { useSelector } from 'react-redux';
+import WrongNetworkModal from '../components/WrongNetworkModal';
 const inputStyle = {
     "width": "100%",
     "marginBottom": "1rem"
 }
 const Mint = () => {
     const { connector, library, chainId, account, activate, deactivate, active, error } = useWeb3React();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);    
     const [activatingConnector, setActivatingConnector] = useState()
-    const accountInfo = useSelector(state => state.accountInfo);    
-    
+    const accountInfo = useSelector(state => state.accountInfo);
+
     useEffect(() => {
         if (activatingConnector && activatingConnector === connector) {
             setActivatingConnector(undefined)
@@ -54,46 +55,46 @@ const Mint = () => {
         if (active === true) {
 
 
-            try{
+            try {
 
                 let tokenURI = `${API_URL}/uploads/`;
                 let value = await ethers.utils.parseEther(price);
-                let tokenID = Math.floor(Math.random() * 10000000000000);                
-                let paymentCurrency = ContractAddress;      
+                let tokenID = Math.floor(Math.random() * 10000000000000);
+                let paymentCurrency = ContractAddress;
                 setLoading(true);
-                await accountInfo.contract.signer.signMessage("For Create NFT",paymentCurrency,value);
+                await accountInfo.contract.signer.signMessage("For Create NFT", paymentCurrency, value);
+
+                let confirmTransaction = await accountInfo.contract.mintNFT(tokenURI, 0, tokenID, false, value, paymentCurrency, royalities);
+                let receipt = await confirmTransaction.wait();
                 
-                let confirmTransaction = await accountInfo.contract.mintNFT(tokenURI,0,tokenID,false,value,paymentCurrency,royalities);
-                await confirmTransaction.wait();
-
                 var data = new FormData();
-                data.append("name",name);
-                data.append("description",description);
-                data.append("price",price);
-                data.append("royalities",royalities);
-                data.append("image",image);
-                data.append("tokenId",tokenID);
-                data.append("address",account);
+                data.append("name", name);
+                data.append("description", description);
+                data.append("price", price);
+                data.append("royalities", royalities);
+                data.append("image", image);
+                data.append("tokenId", tokenID);
+                data.append("address", account);
 
-                axios.post(`${API_URL}/nft/add`,data,{
-                    headers:{
+                axios.post(`${API_URL}/nft/add`, data, {
+                    headers: {
                         'Content-Type': 'multipart/form-data'
                     }
                 })
-                .then(response =>{
-                    setLoading(false);
-                    if(response.data.message){
-                        toast.success(response.data.message);                        
-                    }
-                    if(response.data.error){
-                        toast.error(response.data.error)
-                    }
-                })
-                .catch(err=>{
-                    setLoading(false);
-                    toast.error(err.message);
-                });
-            }catch(err){
+                    .then(response => {
+                        setLoading(false);
+                        if (response.data.message) {
+                            toast.success(response.data.message);
+                        }
+                        if (response.data.error) {
+                            toast.error(response.data.error)
+                        }
+                    })
+                    .catch(err => {
+                        setLoading(false);
+                        toast.error(err.message);
+                    });
+            } catch (err) {
                 setLoading(false);
                 toast.error(err.message);
             }
@@ -104,25 +105,28 @@ const Mint = () => {
 
 
     }
+
+
+
     return (
-        <Container maxWidth="sm" style={{"marginTop":"7rem"}}>
-            <ToastContainer/>
-            {/* Same as */}
-            <ToastContainer />
-            <Box component="form" sx={{ "width": "100%", d: "flex", alignItems: "center", justifyContent: "center", mt: "5rem" }} onSubmit={handleSubmit}>
-                <Typography variant='h3' style={{ "textAlign": "center" }}>
-                    Mint a NFT
-                </Typography>
-                <TextField fullWidth style={inputStyle} type="text" id="standard-basic" label="Name" name="name" variant="standard" required />
-                <TextField fullWidth style={inputStyle} type="text"  label="Description" name="description" variant="standard" required />
-                <TextField fullWidth style={inputStyle} type="number" inputProps={{maxLength: 3,step: "1"}}  label="Royalities" name="royalities" variant="standard" />
-                <TextField fullWidth style={inputStyle} type="number"  inputProps={{maxLength: 13,step: "any"}}  label="Price" name="price" variant="standard" required />
-                <TextField fullWidth style={inputStyle} type="file" name="image" />
-                <Box component="div" sx={{ "textAlign": "center", mt: 1 }}>                
-                    <LoadingButton type="submit" variant="contained" loading={loading} loadingPosition="center">Mint</LoadingButton>
-                </Box>
-            </Box>
-        </Container>
+        <> 
+                <Container maxWidth="sm" style={{ "marginTop": "7rem" }}>
+                    
+                    <Box component="form" sx={{ "width": "100%", d: "flex", alignItems: "center", justifyContent: "center", mt: "5rem" }} onSubmit={handleSubmit}>
+                        <Typography variant='h3' style={{ "textAlign": "center" }}>
+                            Mint a NFT
+                        </Typography>
+                        <TextField fullWidth style={inputStyle} type="text" id="standard-basic" label="Name" name="name" variant="standard" required />
+                        <TextField fullWidth style={inputStyle} type="text" label="Description" name="description" variant="standard" required />
+                        <TextField fullWidth style={inputStyle} type="number" inputProps={{ maxLength: 3, step: "1" }} label="Royalities" name="royalities" variant="standard" />
+                        <TextField fullWidth style={inputStyle} type="number" inputProps={{ maxLength: 13, step: "any" }} label="Price" name="price" variant="standard" required />
+                        <TextField fullWidth style={inputStyle} type="file" name="image" />
+                        <Box component="div" sx={{ "textAlign": "center", mt: 1 }}>
+                            <LoadingButton type="submit" variant="contained" loading={loading} loadingPosition="center">Mint</LoadingButton>
+                        </Box>
+                    </Box>
+                </Container>
+        </>
     )
 }
 

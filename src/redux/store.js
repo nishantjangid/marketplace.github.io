@@ -3,10 +3,12 @@ import { combineReducers } from 'redux'
 
 import accountInfo from "./accountSlice";
 import contractDetails from "./contractSlice";
+import connected from "./connectedSlice";
 
 const reducer = combineReducers({
     accountInfo,
     contractDetails,
+    connected,
 })
 
 const store = configureStore({

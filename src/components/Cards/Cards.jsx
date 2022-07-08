@@ -21,7 +21,53 @@ import { useWeb3React } from '@web3-react/core';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { makeStyles } from '@mui/styles';
+const useStyles = makeStyles((theme) => ({
+  cardContainer: {
+      border: "1px solid rgb(255, 255, 255); !important",
+      boxShadow: "none",
+      borderRadius: "20px !important",
+      padding:"0.5rem", 
+      maxWidth: "200px",    
+      [theme.breakpoints.up("sm")]: {
 
+      },
+  },
+  cardArea:{
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingBottom: "10px",
+    [theme.breakpoints.up("sm")]: {
+
+    },    
+  },
+  cardTitle:{
+    fontSize:'1rem',
+    fontWeight:"bold",
+    [theme.breakpoints.up("sm")]: {
+
+    }
+  },
+  cardDetails:{
+    fontSize:'0.7rem',
+    fontWeight:"bold",
+    [theme.breakpoints.up("sm")]: {
+
+    }
+  },
+  cardImage:{
+    width: "100%",
+    minHeight: "200px",
+    maxHeight: "200px",
+    objectFit: "cover",
+    borderRadius: "20px !important",
+    [theme.breakpoints.up("sm")]: {
+
+    }
+  }
+}));
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -34,6 +80,7 @@ const ExpandMore = styled((props) => {
 }));
 
 const Cards = ({ data, type }) => {
+  const classes = useStyles();
   const { connector, library, chainId, account, activate, deactivate, active, error } = useWeb3React();
   const accountInfo = useSelector(state => state.accountInfo);   
   const [expanded, setExpanded] = React.useState(false);
@@ -102,8 +149,8 @@ const Cards = ({ data, type }) => {
   }
 
   return (
-    <Card sx={{  "border": "1px solid rgba(4, 4, 5, 0.1) !important", "boxShadow": "none", "borderRadius": "20px" }}>
-      <Box sx={{ "display": "flex", "flexDirection": "row", "alignItems": "center", "justifyContent": "space-between", "padding": "10px 16px" }}>
+    <Card className={classes.cardContainer}>
+      <Box className={classes.cardArea}>
         <AvatarGroup max={3}>
           <Avatar alt="Remy Sharp" src={Image1} />
           <Avatar alt="Travis Howard" src={Image1} />
@@ -114,18 +161,20 @@ const Cards = ({ data, type }) => {
       <Link to={`/details/` + data.tokenId}>
         <Box
           component="img"
-          sx={{ "width": "100%", "height": "250px", "objectFit": "cover" }}
+          className={classes.cardImage}
           src={`${API_URL}` + data.path}
           alt="Paella dish"
         >
         </Box>
       </Link>
       <CardContent sx={{ "display": "flex", "flexDirection": "column" }}>
-        <Typography variant="div" color="text.dark">{data.name}</Typography>
-        <Typography variant="div" color="text.dark">NFTs 1/1</Typography>
+      <Link to={`/details/` + data.tokenId} style={{"textDecoration":"none","color":"inherit"}}>
+        <Typography variant="div" color="text.dark" className={classes.cardTitle}>{data.name}</Typography>
+      </Link>
+        <Typography variant="div" color="text.secondary" className={classes.cardDetails}>NFTs 1/1</Typography>
         <Box sx={{ "display": "flex", "flexDirection": "row", "alignItems": "center", "justifyContent": "space-between" }}>
-          <Typography variant="div" color="text.dark">{data.price} ETH</Typography>
-          <Box component="div" sx={{ "display": "flex", "alignItems": "center" }}>
+          <Typography variant="div" color="text.dark" className={classes.cardDetails}>{data.price} ETH</Typography>
+          <Box component="div" sx={{ "display": "flex", "alignItems": "center" }} className={classes.cardDetails}>
             <Favorite />
             <Typography component="span">0</Typography>
           </Box>

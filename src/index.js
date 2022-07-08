@@ -10,11 +10,12 @@ import { createTheme } from '@mui/material';
 import { ThemeProvider } from '@mui/styles';
 import store from './redux/store';  
 import {Provider} from "react-redux";
+import { ethers } from 'ethers';
 
 function getLibrary(provider) {
-  const library = new Web3Provider(provider)
-  library.pollingInterval = 12000
-  return library
+  const library = new ethers.providers.Web3Provider(provider)
+  library.pollingInterval = 8000
+  return library;
 }
 
 const theme = createTheme({

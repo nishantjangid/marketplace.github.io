@@ -1,5 +1,4 @@
 import Header from "./components/Header/Header";
-import HomeSlider from "./components/HomeSlider/HomeSlider";
 import Home from "./pages/Home";
 import Item from "./pages/Item";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -8,10 +7,11 @@ import "./style/Main.css";
 import Details from "./pages/Details";
 import EditProfile from "./pages/EditProfile";
 
+
 function App() {
   return (
     <BrowserRouter>
-      <Header />
+      <Header />       
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/mint" element={<Mint />} />

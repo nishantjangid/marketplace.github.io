@@ -47,7 +47,8 @@ const Home = () => {
     const [recents, setRecents] = React.useState(dummyData);
     const [recentLoading, setRecentLoading] = React.useState(false);
     const { connector, library, chainId, account, activate, deactivate, active, error } = useWeb3React();    
-    useEffect(async()=>{
+
+    const getRecents = async () => {
         setRecentLoading(true);        
             await axios.get(`${API_URL}/nft/get-recents/`,{
                 headers:{
@@ -70,6 +71,9 @@ const Home = () => {
             .catch((err)=>{
                 console.log(err);
             })            
+    }
+    useEffect(async()=>{
+        getRecents();
     },[]);    
 
     return (

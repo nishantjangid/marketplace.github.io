@@ -5,12 +5,12 @@ import Metamask from "../images/metamask.png"
 import Button from '@mui/material/Button';
 import { Typography } from '@mui/material';
 import { Close } from '@mui/icons-material';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import { ethers } from "ethers";
 import axios from 'axios';
-import { API_URL } from '../utils/Constant';
+import { API_URL, CHAINID } from '../utils/Constant';
 import { ABI, ContractAddress } from '../utils/ContractInfo';
-import { accountInfos, removeInfo } from '../redux/accountSlice';
+import { accountInfos } from '../redux/accountSlice';
 import { useWeb3React } from '@web3-react/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { TransactionContext } from "../context/TransactionContext";
@@ -19,6 +19,8 @@ import {
   UserRejectedRequestError as UserRejectedRequestErrorWalletConnect,
   WalletConnectConnector,
 } from '@web3-react/walletconnect-connector'
+import { toHex } from '../utils/Utils';
+import WrongNetworkModal from './WrongNetworkModal';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -35,18 +37,19 @@ const style = {
 const ConnectButtonModal = () => {
   const dispatch = useDispatch()
   const [open, setOpen] = useState(false);
-
   const { connector, library, chainId, account, activate, deactivate, active, error } = useWeb3React();
   const [loading, setLoading] = useState(false);
   const [walletType, setWalletType] = React.useState("");
-  const accountInfo = useSelector(state => state.accountInfo);    
-  
-  const injected = new InjectedConnector({ supportedChainIds: [56, 97] });
-  const connectors = new WalletConnectConnector({
-    rpc: { 56: 'https://bsc-dataseed.binance.org/' },
-    bridge: 'https://bridge.walletconnect.org',
+  const [connected,setConnected] = React.useState(false);
+  const accountInfo = useSelector(state => state.accountInfo);
+  const [connectedRight, setConnectedRight] = useState(true);
+
+  const injected = new InjectedConnector();
+  const walletconnect = new WalletConnectConnector({
+    rpc: { 97 : "https://data-seed-prebsc-1-s1.binance.org:8545/"},
+    bridge: "https://bridge.walletconnect.org",
     qrcode: true,
-    pollingInterval: 10000
+    pollingInterval:2000
   });
 
   const handleOpen = () => {
@@ -57,11 +60,21 @@ const ConnectButtonModal = () => {
   };
 
   async function connect(provider, wallet) {
-    try {
-      await activate(provider);
-      setWalletType(wallet);
+    try {      
+        await activate(provider);    
+        setWalletType(wallet);
     } catch (ex) {
       console.log(ex)
+    }
+  }
+
+  const isAlreadyConnected = async () => {
+    let isConnected = localStorage.getItem('isConnected');
+    if(isConnected){
+      let wallet = localStorage.getItem('wallet');
+      if(wallet == "metamask"){
+        await activate(injected);
+      }
     }
   }
 
@@ -73,19 +86,21 @@ const ConnectButtonModal = () => {
       const provider = await new ethers.providers.Web3Provider(library.provider);
       const signer = await provider.getSigner();
       const contract = await new ethers.Contract(ContractAddress, ABI, signer);
+      const isConnected = true;
       let a = {
         account,
         connector,
         chainId,
         walletType,
-        contract
+        contract,
+        isConnected
       }
       dispatch(accountInfos(a));
     } else {
       console.log("Err Something went wrong");
     }
   }
-  
+
   // INSERT USER  WHEN CONNECT
   const insertUser = () => {
     try {
@@ -117,13 +132,37 @@ const ConnectButtonModal = () => {
     }
   }
   useEffect(() => {
-    initial();
-    insertUser();
-  }, [account,walletType]);
+    if(connected){
+      initial();
+      insertUser()
+    }
+  }, [connected]);
+
+  useEffect(() => {
+    if(active == true){
+        if (Number(chainId) == CHAINID) {
+            let connected ={ connected : true };
+            setConnectedRight(false);
+            setConnected(true);
+            
+        } else {
+            setConnectedRight(true);
+            setConnected(false);
+        }
+    }else{
+        setConnectedRight(false);
+        setConnected(false);        
+    }
+}, [chainId]);
+
+  useEffect(()=>{
+    isAlreadyConnected();
+  },[])
 
 
   return (
     <div>
+      {connectedRight && <WrongNetworkModal />}
       {!(active) && <Button variant="contained" onClick={handleOpen}>Sign in</Button>}
       <Modal
         hideBackdrop
@@ -138,9 +177,9 @@ const ConnectButtonModal = () => {
             <Typography onClick={() => handleClose()}>Metamask</Typography>
             {/* <Metamask/> */}
           </Button>
-          {/* <Button variant="contained" style={{width:"100%","marginBottom":"1rem"}} onClick={()=>connect(walletconnect)}>
-                    <Typography onClick={()=>handleClose()}>Wallet Connect</Typography>                    
-                </Button> */}
+          <Button variant="contained" style={{ width: "100%", "marginBottom": "1rem" }} onClick={() => connect(walletconnect,"walletConnect")}>
+            <Typography onClick={() => handleClose()}>Wallet Connect</Typography>
+          </Button>
 
         </Box>
       </Modal>

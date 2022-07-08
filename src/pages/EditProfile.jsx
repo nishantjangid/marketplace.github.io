@@ -125,8 +125,7 @@ const EditProfile = () => {
         }
      }
 
-useEffect(async ()=>{
-    if(active === true){
+    const userDetails = async () => {
         await axios.get(`${API_URL}/nft/userDetails/${account}`,{
             headers:{
                 'Content-Type': 'application/json',
@@ -151,11 +150,16 @@ useEffect(async ()=>{
             console.log(err);
         })  
     }
+
+useEffect(async ()=>{
+    if(active === true){
+        userDetails();
+    }
 },[account],[]);     
 
     return (
         <Container maxWidth="md" style={{ "marginTop": "5rem" }}>
-            <ToastContainer />
+            
             <Grid container spacing={2}>
                 <Grid item lg={8} md={8} xs={12}>
                     <Box component="form" encType="multipart/form-data" sx={{ "width": "100%", d: "flex", alignItems: "center", justifyContent: "center", margin: "5rem 0rem" }} onSubmit={handleSubmit}>
