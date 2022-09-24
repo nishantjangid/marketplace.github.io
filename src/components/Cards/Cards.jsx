@@ -11,6 +11,9 @@ import Image1 from "../../images/image1.png";
 
 import AvatarGroup from '@mui/material/AvatarGroup';
 import { Favorite } from '@mui/icons-material';
+import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
+import Checkbox from '@mui/material/Checkbox';
+
 import { Box, TextField } from '@mui/material';
 import { API_URL } from '../../utils/Constant';
 import { Link } from 'react-router-dom';
@@ -22,15 +25,21 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { makeStyles } from '@mui/styles';
+import LikeButton from '../LikeButton/LikeButton';
+
+const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+
 const useStyles = makeStyles((theme) => ({
   cardContainer: {
-      border: "1px solid rgb(255, 255, 255); !important",
+      border: "1px solid rgb(233 233 233) !important",
       boxShadow: "none",
       borderRadius: "20px !important",
       padding:"0.5rem", 
-      maxWidth: "200px",    
-      [theme.breakpoints.up("sm")]: {
-
+      maxWidth: "200px",   
+       
+      [theme.breakpoints.down("md")]: {
+        maxWidth: "100%", 
+        width:'100% !important',   
       },
   },
   cardArea:{
@@ -66,6 +75,29 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("sm")]: {
 
     }
+  },
+  likeIcon:{
+    fontSize:"1rem",
+    [theme.breakpoints.up("sm")]: {
+
+    }
+  },
+  CardContent:{
+    padding:"16px 10px !important",
+    "display": "flex", "flexDirection": "column", 
+    [theme.breakpoints.down("md")]: {
+      
+    }
+  },
+  cardTitleDetails:{
+    background: 'rgba(22, 22, 26, 0.04)',
+    borderRadius: '10px',
+    display:"flex",
+    flexDirection:"column",
+    padding:"0.5rem",
+    [theme.breakpoints.down("md")]: {
+      
+    }
   }
 }));
 const ExpandMore = styled((props) => {
@@ -84,7 +116,7 @@ const Cards = ({ data, type }) => {
   const { connector, library, chainId, account, activate, deactivate, active, error } = useWeb3React();
   const accountInfo = useSelector(state => state.accountInfo);   
   const [expanded, setExpanded] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -152,7 +184,7 @@ const Cards = ({ data, type }) => {
     <Card className={classes.cardContainer}>
       <Box className={classes.cardArea}>
         <AvatarGroup max={3}>
-          <Avatar alt="Remy Sharp" src={Image1} />
+          <Avatar  alt="Remy Sharp" src={Image1} />
           <Avatar alt="Travis Howard" src={Image1} />
           <Avatar alt="Cindy Baker" src={Image1} />
         </AvatarGroup>
@@ -167,15 +199,17 @@ const Cards = ({ data, type }) => {
         >
         </Box>
       </Link>
-      <CardContent sx={{ "display": "flex", "flexDirection": "column" }}>
-      <Link to={`/details/` + data.tokenId} style={{"textDecoration":"none","color":"inherit"}}>
-        <Typography variant="div" color="text.dark" className={classes.cardTitle}>{data.name}</Typography>
-      </Link>
+      <CardContent className={classes.CardContent}>
+      <Box className={classes.cardTitleDetails}>
+        <Link to={`/details/` + data.tokenId} style={{"textDecoration":"none","color":"inherit"}}>
+          <Typography variant="div" color="text.dark" className={classes.cardTitle}>{data.name}</Typography>
+        </Link>
         <Typography variant="div" color="text.secondary" className={classes.cardDetails}>NFTs 1/1</Typography>
+      </Box>
         <Box sx={{ "display": "flex", "flexDirection": "row", "alignItems": "center", "justifyContent": "space-between" }}>
           <Typography variant="div" color="text.dark" className={classes.cardDetails}>{data.price} ETH</Typography>
-          <Box component="div" sx={{ "display": "flex", "alignItems": "center" }} className={classes.cardDetails}>
-            <Favorite />
+          <Box component="div" sx={{ "display": "flex", "alignItems": "center" }} className={classes.likeIcon}>            
+            <LikeButton />
             <Typography component="span">0</Typography>
           </Box>
         </Box>

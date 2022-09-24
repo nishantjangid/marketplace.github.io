@@ -19,10 +19,10 @@ import { Link } from 'react-router-dom';
 import { TextFields } from '@mui/icons-material';
 import ConnectButtonModal from '../ConnectButtonModal';
 import { useWeb3React } from '@web3-react/core';
-import { makeStyles } from "@mui/styles"
 import Disconnect from '../Disconnect';
+import { makeStyles } from "@mui/styles"
 import { ToastContainer,toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
 const useStyles = makeStyles((theme) => ({
     logoLg: {
         display: "none",
@@ -196,7 +196,7 @@ const Header = () => {
     }
     return (
         <Box component="div">
-        <ToastContainer />
+        
             <Box className={classes.headerResponsive}>
                 <Link to="/" style={{ "textDecoration": "none", "color": "inherit" }}>
                     <Box component="div" className={classes.logoLg}>

@@ -148,5 +148,31 @@ router.get("/user-created/:address",async(req,res)=>{
     }    
 })
 
+// UPDATE THE USER COVER IMAGE
+router.post("/user/updateCover/:address",async (req, res)=>{
+
+    upload(req, res, async (err) => {
+
+        try{
+    
+            if (!req.file) {
+                return res.status(404).json({ code: 500, message: "Please choose the Image." });
+            }    
+    
+            const response = await NFTUser.updateOne(
+                            { address: req.params.address },
+                            { $set:
+                                {
+                                    coverImage:"/uploads/" + req.file.filename
+                                }
+                            }
+                            );            
+            return res.status(200).json({ code: 200, message: "Cover Image Updated successfully" });        
+        }catch(err){
+            return res.status(500).json({code:500,message:err.message});
+        }
+    })
+    
+});
 
 module.exports = router;

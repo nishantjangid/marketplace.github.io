@@ -1,20 +1,23 @@
-import { Edit } from '@mui/icons-material';
+
 import { Button, Container, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Image1 from "../images/profile-bg.svg";
 import Cards from '../components/Cards/Cards';
 import { API_URL } from '../utils/Constant';
 import { useWeb3React } from '@web3-react/core';
 import axios from 'axios';
 import Skeleton from '../components/Skeleton/Skeleton';
-import { ToastContainer } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import SigninRequest from '../components/SigninRequest';
 import { makeStyles } from '@mui/styles';
+import UserCoverModal from '../components/UserComponent/UserCoverModal';
+import converDemo from "../images/cover-demo.png";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import CollectionCard from '../components/Cards/CollectionCard';
 const useStyles = makeStyles((theme) => ({
     itemCard: {
         rowGap: "1rem",
@@ -22,13 +25,22 @@ const useStyles = makeStyles((theme) => ({
         display: "flex",
         flexDirection: "row",
         flexWrap: "wrap",
-        flex: "1 1 auto", 
+        flex: "1 1 auto",
         [theme.breakpoints.up("sm")]: {
 
         },
     },
+    converImage: {
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+        borderRadius: "20px",
+        [theme.breakpoints.up("sm")]: {
+
+        },
+    }
 }));
-const EditBanner = { "marginTop": "10px", "width": "100%", "objectFit": "cover","background": "rgb(34,193,195)","background": "linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%)", "height": "250px", "borderRadius": "20px", "position": "relative", }
+const EditBanner = { "marginTop": "10px", "width": "100%", "objectFit": "cover", "background": "rgb(34,193,195)", "background": "linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%)", "height": "250px", "borderRadius": "20px", "position": "relative" }
 const ProfilePic = {
     "width": "200px",
     "height": "200px",
@@ -41,7 +53,7 @@ const ProfilePic = {
     "left": "10%",
     "borderRadius": "50%",
     "overflow": "hidden",
-    "border":"5px solid #fff"
+    "border": "5px solid #fff"
 }
 
 const userAddress = { "verticalAlign": "center", "alignItems": "center", "borderRadius": "20px", "background": "rgba(4, 4, 5, 0.04)", "padding": "8px", "display": "inline", "fontSize": "0.9rem", "fontWeight": "bolder", "color": "rgb(110, 110, 110)" }
@@ -91,13 +103,15 @@ const Item = () => {
     const [onSale, setOnSale] = React.useState([]);
     const [owned, setOwned] = React.useState([]);
     const [created, setCreated] = React.useState([]);
+    const [collection, setCollection] = React.useState([]);
     const [userDetail, setUserDetail] = React.useState([]);
     const [saleLoading, setSaleLoading] = React.useState(true);
     const [ownedLoading, setOwnedLoading] = React.useState(true);
     const [createdLoading, setCreatedLoading] = React.useState(true);
+    const [collectionLoading, setCollectionLoading] = React.useState(true);
 
     const { account, active } = useWeb3React();
-    console.log(userDetail);
+
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -106,22 +120,22 @@ const Item = () => {
         setSaleLoading(true);
         setOwnedLoading(true);
         setCreatedLoading(true);
+        setCollectionLoading(true);
         if (active === true) {
             await axios.get(`${API_URL}/nft/user-onsale/${account}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*',
                 }
-            })
-                .then(response => {
+            }).then(response => {
 
-                    if (response.data.code == 200) {
-                        setSaleLoading(false)
-                        setOnSale(response.data.message);
-                    } else if (response.data.code == 500) {
-                        console.log(response.data.message)
-                    }
-                })
+                if (response.data.code == 200) {
+                    setSaleLoading(false)
+                    setOnSale(response.data.message);
+                } else if (response.data.code == 500) {
+                    console.log(response.data.message)
+                }
+            })
                 .catch((err) => {
                     console.log(err);
                 })
@@ -155,15 +169,35 @@ const Item = () => {
 
                     if (response.data.code == 200) {
                         setCreatedLoading(false);
-                        console.log(response.data.message);
+
                         setCreated(response.data.message);
                     } else if (response.data.code == 500) {
-                        console.log(response.data.message)
+
                     }
                 })
                 .catch((err) => {
                     console.log(err);
                 })
+            // GET USER COLLECTIONS
+            await axios.get(`${API_URL}/collection/getUserCollection/${account}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                }
+            }).then(response => {
+
+                if (response.data.code == 200) {
+                    setCollectionLoading(false);
+                    setCollection(response.data.message);
+                } else if (response.data.code == 500) {
+                    setCollectionLoading(false);
+                }
+            })
+                .catch((err) => {
+                    console.log(err);
+                })
+
+
         } else {
             // window.location.href = "./";
         }
@@ -180,7 +214,7 @@ const Item = () => {
                 .then(response => {
 
                     if (response.data.code == 200) {
-                        console.log(response.data);
+
                         setUserDetail(response.data.message);
                     } else if (response.data.code == 500) {
                         console.log(response.data.message)
@@ -201,16 +235,17 @@ const Item = () => {
         <>
             {
                 active === true ?
-                    <Container maxWidth="xl" style={{ "marginTop": "7rem" }}>
-                        
+                    <Container maxWidth="xl">
+                        <ToastContainer />
                         {
                             userDetail.length > 0 ?
-                                userDetail.map((e)=>
+                                userDetail.map((e) =>
                                     <>
                                         <Box component="div" sx={EditBanner} onMouseEnter={e => { setShowBtn(true); }} onMouseLeave={e => { setShowBtn(false) }}>
-                                            {showBtn && <Button className='' style={{ "textTransform": "none !important", "position": "absolute", "bottom": "10px", "right": "10px" }} variant="contained" endIcon={<Edit />}>Edit Cover</Button>}
+                                            <img src={`${e.coverImage != "" ? API_URL + '/' + e.coverImage : converDemo}`} className={classes.converImage} />
+                                            {showBtn && <UserCoverModal />}
                                             <Box component="div" sx={ProfilePic}>
-                                                <img src={`${API_URL+'/'+e.image}`} style={{ "width": "100%", "height": "100%" }} />
+                                                <img src={`${API_URL + '/' + e.image}`} style={{ "width": "100%", "height": "100%" }} />
                                             </Box>
                                         </Box>
                                         <Box sx={{ "paddingTop": "4rem" }}>
@@ -267,11 +302,15 @@ const Item = () => {
                                                             :
                                                             created.map(e => <Cards data={e} key={e._id} type={"onsale"} />)
                                                         }
+
                                                     </Box>
                                                 </TabPanel>
                                                 <TabPanel value={value} index={3}>
                                                     <Box component="div" className={classes.itemCard}>
-                                                        <Skeleton />
+                                                        {collectionLoading ? Array(8).fill(<Skeleton />)
+                                                            :
+                                                            collection.map(e => <CollectionCard data={e} key={e._id} type={"collection"} />)
+                                                        }
                                                     </Box>
                                                 </TabPanel>
                                                 <TabPanel value={value} index={4}>

@@ -77,64 +77,36 @@ const Home = () => {
     },[]);    
 
     return (
-        <Container maxWidth="xl" style={{ "marginTop": "7rem" }}>
-
-            {/* <Typography variant="h3">Ceate single item on Ethereum</Typography> */}
+        <Container maxWidth="xl" sx={{mt:"1rem"}}>            
             <Grid container item spacing={3}>
-                <Grid container item xs={12} lg={4}>                    
-                        <Box style={ImageText}>
-                            <Typography variant="h5" component="span">Classic NFT</Typography>
-                        </Box>
-                        <img src={Image1} style={{ "width": "100%", "height": "100%" }} />                    
+                <Grid container item xs={12} md={4} lg={4}>                    
+                        <img src={Image1} style={{ "width": "100%", "height": "100%" }} alt="home Big "/>                    
                 </Grid>
-                <Grid container item xs={12} lg={8} style={{ "display": "flex", "flexWrap": "wrap", "width": "100%", "height": "100%" }} spacing={3}>
-                    <Grid container item xs={12} md={12} lg={3}>                        
-                            <Box style={ImageText}>
-                                <Typography variant="h5" component="span">Classic NFT</Typography>
-                            </Box>
-                            <img src={Image1} style={{ "width": "100%", "height": "100%" }} />                        
+                <Grid container item xs={12} md={8} lg={8} style={{ "display": "flex", "flexWrap": "wrap", "width": "100%", "height": "100%" }} spacing={3}>
+                    <Grid container item xs={12} md={3} lg={3}>                        
+                            <img src={Image1} style={{ "width": "100%", "height": "100%" }} alt="home small "/>                        
                     </Grid>
-                    <Grid container item xs={12} md={12} lg={3}>                        
-                            <Box style={ImageText}>
-                                <Typography variant="h5" component="span">Classic NFT</Typography>
-                            </Box>
-                            <img src={Image1} style={{ "width": "100%", "height": "100%" }} />                        
+                    <Grid container item xs={12} md={3} lg={3}>                        
+                            <img src={Image1} style={{ "width": "100%", "height": "100%" }} alt="home small "/>                        
                     </Grid>
-                    <Grid container item xs={12} md={12} lg={3}>                        
-                            <Box style={ImageText}>
-                                <Typography variant="h5" component="span">Classic NFT</Typography>
-                            </Box>
-                            <img src={Image1} style={{ "width": "100%", "height": "100%" }} />                        
+                    <Grid container item xs={12} md={3} lg={3}>                                                    
+                            <img src={Image1} style={{ "width": "100%", "height": "100%" }} alt="home small "/>                        
                     </Grid>
-                    <Grid container item xs={12} md={12} lg={3}>                        
-                            <Box style={ImageText}>
-                                <Typography variant="h5" component="span">Classic NFT</Typography>
-                            </Box>
-                            <img src={Image1} style={{ "width": "100%", "height": "100%" }} />                        
+                    <Grid container item xs={12} md={3} lg={3}>                        
+                            <img src={Image1} style={{ "width": "100%", "height": "100%" }} alt="home small "/>                        
                     </Grid>
-                    <Grid container item xs={12} md={12} lg={3}>                        
-                            <Box style={ImageText}>
-                                <Typography variant="h5" component="span">Classic NFT</Typography>
-                            </Box>
-                            <img src={Image1} style={{ "width": "100%", "height": "100%" }} />                        
+                    <Grid container item xs={12} md={3} lg={3}>                        
+
+                            <img src={Image1} style={{ "width": "100%", "height": "100%" }} alt="home small "/>                        
                     </Grid>
-                    <Grid container item xs={12} md={12} lg={3}>                        
-                            <Box style={ImageText}>
-                                <Typography variant="h5" component="span">Classic NFT</Typography>
-                            </Box>
-                            <img src={Image1} style={{ "width": "100%", "height": "100%" }} />                        
+                    <Grid container item xs={12} md={3} lg={3}>                                                
+                            <img src={Image1} style={{ "width": "100%", "height": "100%" }} alt="home small " />                        
                     </Grid>
-                    <Grid container item xs={12} md={12} lg={3}>                        
-                            <Box style={ImageText}>
-                                <Typography variant="h5" component="span">Classic NFT</Typography>
-                            </Box>
-                            <img src={Image1} style={{ "width": "100%", "height": "100%" }} />                        
+                    <Grid container item xs={12} md={3} lg={3}>                                                    
+                            <img src={Image1} style={{ "width": "100%", "height": "100%" }} alt="home small "/>                        
                     </Grid>
-                    <Grid container item xs={12} md={12} lg={3}>                        
-                            <Box style={ImageText}>
-                                <Typography variant="h5" component="span">Classic NFT</Typography>
-                            </Box>
-                            <img src={Image1} style={{ "width": "100%", "height": "100%" }} />                        
+                    <Grid container item xs={12} md={3} lg={3}>                                                    
+                            <img src={Image1} style={{ "width": "100%", "height": "100%" }} alt="home small "/>                        
                     </Grid>
                 </Grid>
             </Grid>
@@ -147,12 +119,12 @@ const Home = () => {
                 <Grid container  spacing={2}>
 
                     {recentLoading ? Array(8).fill(
-                        <Grid container item lg={2} md={12} xs={12}>                            
+                        <Grid container item lg={2} md={2} xs={12}>                            
                                 <Skeleton />                            
                         </Grid>)
                         :
                         recents.map(e =>
-                            <Grid  container item lg={2} md={12} xs={12}>                                
+                            <Grid  container item lg={2} md={2} xs={12}>                                
                                 <Cards data={e} key={e._id} type={"recents"} />                                
                             </Grid>
                         )

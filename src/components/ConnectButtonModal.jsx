@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import Metamask from "../images/metamask.png"
+import Metamask from "../images/metamask.png";
+import walletConnect from "../images/walletconnect.png";
 import Button from '@mui/material/Button';
-import { Typography } from '@mui/material';
+import { Avatar, Typography } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import { toast, ToastContainer } from 'react-toastify';
 import { ethers } from "ethers";
@@ -21,21 +22,28 @@ import {
 } from '@web3-react/walletconnect-connector'
 import { toHex } from '../utils/Utils';
 import WrongNetworkModal from './WrongNetworkModal';
+import { useConnect } from '../Hooks/useConnect';
+import {  useConnectedWallet } from '../Hooks/useConnectedWallet';
+import { injected, walletconnect } from '../utils/Connectors';
 const style = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  pt: 2,
-  px: 4,
-  pb: 3,
+  borderStyle: 'solid',
+  borderColor: 'rgb(22, 22, 26)',
+  border: 'none',
+  boxShadow: 'rgb(27 32 50 / 10%) 0px 10px 60px', 
+  backdropFilter: 'blur(20px)',
+  background: 'rgba(255, 255, 255, 0.7)',
+  p: 4,
 };
 const ConnectButtonModal = () => {
   const dispatch = useDispatch()
+  const {connect} = useConnect();
+  const {handleConnectedConnection} = useConnectedWallet();
+
   const [open, setOpen] = useState(false);
   const { connector, library, chainId, account, activate, deactivate, active, error } = useWeb3React();
   const [loading, setLoading] = useState(false);
@@ -44,13 +52,7 @@ const ConnectButtonModal = () => {
   const accountInfo = useSelector(state => state.accountInfo);
   const [connectedRight, setConnectedRight] = useState(true);
 
-  const injected = new InjectedConnector();
-  const walletconnect = new WalletConnectConnector({
-    rpc: { 97 : "https://data-seed-prebsc-1-s1.binance.org:8545/"},
-    bridge: "https://bridge.walletconnect.org",
-    qrcode: true,
-    pollingInterval:2000
-  });
+
 
   const handleOpen = () => {
     setOpen(true);
@@ -59,24 +61,25 @@ const ConnectButtonModal = () => {
     setOpen(false);
   };
 
-  async function connect(provider, wallet) {
-    try {      
-        await activate(provider);    
-        setWalletType(wallet);
-    } catch (ex) {
-      console.log(ex)
-    }
-  }
+  // async function connect(provider, wallet) {
+  //   try {      
+  //       setWalletType(wallet);
+  //       await activate(provider);   
+  //       handleClose();
+  //   } catch (ex) {
+  //     console.log(ex)
+  //   }
+  // }
 
-  const isAlreadyConnected = async () => {
-    let isConnected = localStorage.getItem('isConnected');
-    if(isConnected){
-      let wallet = localStorage.getItem('wallet');
-      if(wallet == "metamask"){
-        await activate(injected);
-      }
-    }
-  }
+  // const isAlreadyConnected = async () => {
+  //   let isConnected = localStorage.getItem('isConnected');
+  //   if(isConnected){
+  //     let wallet = localStorage.getItem('wallet');
+  //     if(wallet == "metamask"){
+  //       await activate(injected);
+  //     }
+  //   }
+  // }
 
   // INITIALIZE VALUES WHEN WALLET CONNECT
   const initial = async () => {
@@ -156,7 +159,7 @@ const ConnectButtonModal = () => {
 }, [chainId]);
 
   useEffect(()=>{
-    isAlreadyConnected();
+    handleConnectedConnection();
   },[])
 
 
@@ -173,11 +176,11 @@ const ConnectButtonModal = () => {
       >
         <Box sx={{ ...style, width: 500 }}>
           <Box variant="contained" style={{ "float": "right", "padding": "0.5rem", "marginBottom": "1rem", "cursor": "pointer" }} onClick={handleClose}><Close /></Box>
-          <Button variant="contained" style={{ width: "100%", "marginBottom": "1rem" }} onClick={() => connect(injected, "metamask")}>
+          <Button variant="contained" startIcon={<Avatar src={Metamask} />} style={{ width: "100%", "marginBottom": "1rem" }} onClick={() => connect(injected, "metamask")}>
             <Typography onClick={() => handleClose()}>Metamask</Typography>
             {/* <Metamask/> */}
           </Button>
-          <Button variant="contained" style={{ width: "100%", "marginBottom": "1rem" }} onClick={() => connect(walletconnect,"walletConnect")}>
+          <Button variant="contained" startIcon={<Avatar src={walletConnect} />} style={{ width: "100%", "marginBottom": "1rem" }} onClick={() => connect(walletconnect,"walletConnect")}>
             <Typography onClick={() => handleClose()}>Wallet Connect</Typography>
           </Button>
 

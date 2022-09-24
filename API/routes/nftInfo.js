@@ -71,7 +71,8 @@ router.get("/get-one/:id", async (req, res) => {
 // GET THE ALL NFTs
 router.get("/get-all/", async (req, res) => {
     try {
-        const OneNFT = await NFT.find();
+        
+        const OneNFT = await NFT.find().sort();
 
         if (!OneNFT) return res.status(500).json({ error: "No NFT found!" });
 
@@ -79,7 +80,6 @@ router.get("/get-all/", async (req, res) => {
     } catch (err) {
         return res.status(500).json({ error: err.message });
     }
-    if (!req.params.id) return res.status(500).json({ error: "Please provide a details" });
 
 })
 

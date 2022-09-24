@@ -10,7 +10,8 @@ import { ethers } from 'ethers';
 import { ContractAddress, initiateContract } from '../utils/ContractInfo';
 import { LoadingButton } from '@mui/lab';
 import { useSelector } from 'react-redux';
-import WrongNetworkModal from '../components/WrongNetworkModal';
+import 'react-toastify/dist/ReactToastify.css';
+
 const inputStyle = {
     "width": "100%",
     "marginBottom": "1rem"
@@ -110,8 +111,8 @@ const Mint = () => {
 
     return (
         <> 
-                <Container maxWidth="sm" style={{ "marginTop": "7rem" }}>
-                    
+                <Container maxWidth="sm" >
+                    <ToastContainer />
                     <Box component="form" sx={{ "width": "100%", d: "flex", alignItems: "center", justifyContent: "center", mt: "5rem" }} onSubmit={handleSubmit}>
                         <Typography variant='h3' style={{ "textAlign": "center" }}>
                             Mint a NFT

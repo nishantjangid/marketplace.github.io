@@ -7,7 +7,7 @@ export const networkParams = {
     "0x61": {
       chainId: "0x61",
       rpcUrls: [RPC_URL],
-      chainName: "Biance Testnet",
+      chainName: "Binance Testnet",
       nativeCurrency: { name: "BNB", decimals: 18, symbol: "BNB" },
       blockExplorerUrls: ["https://testnet.bscscan.com"],
       iconUrls: ["https://image.shutterstock.com/image-vector/bnb-binance-cryptocurrency-coin-finance-600w-1940122603.jpg"]

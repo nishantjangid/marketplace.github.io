@@ -5,6 +5,7 @@ import { useWeb3React } from '@web3-react/core'
 import axios from 'axios'
 import React, { useEffect, useReducer, useState } from 'react'
 import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 import { API_URL } from '../utils/Constant'
 const inputStyle = {
     "width": "100%",
@@ -158,8 +159,8 @@ useEffect(async ()=>{
 },[account],[]);     
 
     return (
-        <Container maxWidth="md" style={{ "marginTop": "5rem" }}>
-            
+        <Container maxWidth="md" >
+            <ToastContainer />
             <Grid container spacing={2}>
                 <Grid item lg={8} md={8} xs={12}>
                     <Box component="form" encType="multipart/form-data" sx={{ "width": "100%", d: "flex", alignItems: "center", justifyContent: "center", margin: "5rem 0rem" }} onSubmit={handleSubmit}>

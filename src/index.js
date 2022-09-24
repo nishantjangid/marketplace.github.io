@@ -35,7 +35,7 @@ theme.typography.h3 = {
 ReactDOM.render(
   <TransactionProvider >
   <Web3ReactProvider getLibrary={getLibrary}>
-    <Provider store={store}>
+    <Provider store={store}>     
       <React.StrictMode>
       <ThemeProvider theme={theme}>
         <App />

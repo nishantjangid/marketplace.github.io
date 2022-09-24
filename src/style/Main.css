@@ -1,18 +1,24 @@
 button{
-    background-image: linear-gradient(to right, rgb(255, 0, 184) 0%, rgb(100, 161, 255) 50%, rgb(0, 102, 255) 100%);
+    background-image: linear-gradient(to right, rgb(22, 22, 26) 0%, rgb(22, 22, 26) 50%, rgb(22, 22, 26) 100%);
     background-size: 200%;
-    color: rgb(255, 255, 255);
+    /* color: rgb(255, 255, 255); */
     border: 0px;
     transition: all 0.5s ease;
     border-radius: 20px !important;
-    font-weight: 700 !important;
+    font-weight: 500 !important;
     text-transform: capitalize !important;
+    border-color: rgb(22, 22, 26);
+    color: rgb(255, 255, 255);
+    /* background-image: rgb(22, 22, 26); */
 }
 button:hover{
     background-position: right center;
-    color: #000;
+    color: #fff;
     transition: all 0.5s ease-in-out 0s;
 }
 body{
     font-family: 'Open Sans', sans-serif !important;
+}
+.MuiCircularProgress-root{
+    color:#fff;
 }

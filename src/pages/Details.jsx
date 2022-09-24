@@ -162,88 +162,87 @@ const Details = () => {
     },[]);    
 
   return (
-      <Container maxWidth="lg" sx={{"padding":"2rem 0","marginTop":"7rem"}}>
-      
-      {nfts.map(nft => 
-            (<Grid container spacing={2} key={nft._id}>
-                <Grid  item lg={6} md={6} xs={12} sx={{"width":"100%","height":"100%","padding":"2rem"}}>
-                    <Box component="img" src={`${API_URL+'/'+nft.path}`} sx={{"width":"100%","objectFit":"cover","borderRadius":"10px"}}/>
-                </Grid>
-                <Grid  item lg={6} md={6} xs={12}>
-                    <Box sx={{"padding":"2rem"}}>
-                        <Typography sx={Heading}>{nft.name}</Typography>
-                        <Box component="div" sx={{"display":"flex","flexDirection":"row","fontWeight":"700"}}>
-                            <Box component="div" sx={{"color":"rgb(110, 110, 110)"}}>Price:</Box>&nbsp;<Box component="div"> {nft.price} ETH</Box>&nbsp;
-                            <Box component="div" sx={{"color":"rgb(110, 110, 110)"}}>1/1</Box>
-                        </Box>
-                        <Box component="p" sx={{"whiteSpace":"pre-wrap","overflowWrap":"break-word","textAlign":"justify","color":"rgb(4, 4, 5)","fontSize":"20px !important"}}>
-                        {nfts.description}
-                        </Box>
-                        <Box style={nftOwnerDetail}>
-                            <Box sx={{"width":"calc(50% - 6px);"}}>
-                                <Typography sx={DetailHeading}>Creator</Typography>
-                                <Box sx={{"display":"flex","alignItems":"center"}}>
-                                    <Box component="img" src={Image} width="55px" style={{"borderRadius":"50%"}}></Box>
-                                    <Typography component="h2" sx={{"marginLeft":"0.5rem"}}>{(nft.creatorAddress).substr(0,9)}...</Typography>
-                                </Box>
+      <Container maxWidth="lg" sx={{mt:"2rem"}}>      
+        {nfts.map(nft => 
+                (<Grid container spacing={2} key={nft._id}>
+                    <Grid  item lg={6} md={6} xs={12} sx={{"width":"100%","height":"100%","padding":"2rem"}}>
+                        <Box component="img" src={`${API_URL+'/'+nft.path}`} sx={{"width":"100%","objectFit":"cover","borderRadius":"10px"}}/>
+                    </Grid>
+                    <Grid  item lg={6} md={6} xs={12}>
+                        <Box sx={{"padding":"2rem"}}>
+                            <Typography sx={Heading}>{nft.name}</Typography>
+                            <Box component="div" sx={{"display":"flex","flexDirection":"row","fontWeight":"700"}}>
+                                <Box component="div" sx={{"color":"rgb(110, 110, 110)"}}>Price:</Box>&nbsp;<Box component="div"> {nft.price} ETH</Box>&nbsp;
+                                <Box component="div" sx={{"color":"rgb(110, 110, 110)"}}>1/1</Box>
                             </Box>
-                            <Box sx={{"width":"calc(50% - 6px);"}}>
-                                <Typography sx={DetailHeading}>Collection</Typography>
-                                <Box sx={{"display":"flex","alignItems":"center"}}>
-                                    <Box component="img" src={Image} width="55px" style={{"borderRadius":"50%"}}></Box>
-                                    <Typography component="h2" sx={{"marginLeft":"0.5rem"}}>Owner Address</Typography>
-                                </Box>
+                            <Box component="p" sx={{"whiteSpace":"pre-wrap","overflowWrap":"break-word","textAlign":"justify","color":"rgb(4, 4, 5)","fontSize":"20px !important"}}>
+                            {nfts.description}
                             </Box>
-                        </Box>  
-                        <Box style={{"width":"100%","display":"flex","alignItems":"center","justifyContent":"center"}}>
-                        {loading==true ?
-                        <LoadingButton loading variant="outlined"
-                        style={{"border":"none","padding":".5rem 2rem","marginTop":"2rem"}}
-                        >
-                            Submit
-                        </LoadingButton>
-                         : 
-                            <LoadingButton
-                            onClick={()=>buyNFT(nftID)}                    
-                            variant="outlined"
-                            style={{"border":"none","padding":".5rem 2rem","marginTop":"2rem","color":"#000"}}>
-                                Buy
-                            </LoadingButton>
-                         }
-                        </Box>                      
-                        <Box component="div" sx={{ borderBottom: 1, borderColor: 'divider',"marginTop":"2rem" }}>
-                            <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                                <Tab sx={TabStyle} label="Details" {...a11yProps(0)} />
-                                <Tab sx={TabStyle} label="Bids" {...a11yProps(1)} />
-                                <Tab sx={TabStyle} label="History" {...a11yProps(2)} />
-                            </Tabs>
-                            </Box>
-                            <TabPanel  value={value} index={0}>
-                                <Box component="div">
-                                    <Typography sx={DetailHeading}>Owner</Typography>
-                                    <Box component="div" sx={{"display":"flex","alignItems":"center"}}>
+                            <Box style={nftOwnerDetail}>
+                                <Box sx={{"width":"calc(50% - 6px);"}}>
+                                    <Typography sx={DetailHeading}>Creator</Typography>
+                                    <Box sx={{"display":"flex","alignItems":"center"}}>
                                         <Box component="img" src={Image} width="55px" style={{"borderRadius":"50%"}}></Box>
-                                        <Typography component="h2" sx={{"marginLeft":"0.5rem"}}>{(nft.ownerAddress).substr(0,9)}...</Typography>
+                                        <Typography component="h2" sx={{"marginLeft":"0.5rem"}}>{(nft.creatorAddress).substr(0,9)}...</Typography>
                                     </Box>
                                 </Box>
-                            </TabPanel>
-                            <TabPanel value={value} index={1}>
-                            Item Two
-                            </TabPanel>
-                            <TabPanel value={value} index={2}>
-                                <Box sx={{"display":"flex","alignItems":"center"}}>
-                                    <Box component="img" src={Image} width="55px" sx={{"borderRadius":"50%","marginRight":"0.5rem"}}/>
-                                    <Box sx={{"display":"flex","flexDirection":"column"}}>
-                                        <Typography component="span">Listed For 6 ETH</Typography>
-                                        <Typography component="span">By Nishant 34 minitus ago</Typography>
+                                <Box sx={{"width":"calc(50% - 6px);"}}>
+                                    <Typography sx={DetailHeading}>Collection</Typography>
+                                    <Box sx={{"display":"flex","alignItems":"center"}}>
+                                        <Box component="img" src={Image} width="55px" style={{"borderRadius":"50%"}}></Box>
+                                        <Typography component="h2" sx={{"marginLeft":"0.5rem"}}>Owner Address</Typography>
                                     </Box>
                                 </Box>
-                            </TabPanel>                            
-                        
-                    </Box>
-                </Grid>
-            </Grid>)
-      )}
+                            </Box>  
+                            <Box style={{"width":"100%","display":"flex","alignItems":"center","justifyContent":"center"}}>
+                            {loading==true ?
+                            <LoadingButton loading variant="outlined"
+                            style={{"border":"none","padding":".5rem 2rem","marginTop":"2rem"}}
+                            >
+                                Submit
+                            </LoadingButton>
+                            : 
+                                nft.resell == 1 ? <LoadingButton
+                                onClick={()=>buyNFT(nftID)}                    
+                                variant="outlined"
+                                style={{"border":"none","padding":".5rem 2rem","marginTop":"2rem",color:'#fff'}}>
+                                    Buy
+                                </LoadingButton> : ""
+                            }
+                            </Box>                      
+                            <Box component="div" sx={{ borderBottom: 1, borderColor: 'divider',"marginTop":"2rem" }}>
+                                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                                    <Tab sx={TabStyle} label="Details" {...a11yProps(0)} />
+                                    <Tab sx={TabStyle} label="Bids" {...a11yProps(1)} />
+                                    <Tab sx={TabStyle} label="History" {...a11yProps(2)} />
+                                </Tabs>
+                                </Box>
+                                <TabPanel  value={value} index={0}>
+                                    <Box component="div">
+                                        <Typography sx={DetailHeading}>Owner</Typography>
+                                        <Box component="div" sx={{"display":"flex","alignItems":"center"}}>
+                                            <Box component="img" src={Image} width="55px" style={{"borderRadius":"50%"}}></Box>
+                                            <Typography component="h2" sx={{"marginLeft":"0.5rem"}}>{(nft.ownerAddress).substr(0,9)}...</Typography>
+                                        </Box>
+                                    </Box>
+                                </TabPanel>
+                                <TabPanel value={value} index={1}>
+                                Item Two
+                                </TabPanel>
+                                <TabPanel value={value} index={2}>
+                                    <Box sx={{"display":"flex","alignItems":"center"}}>
+                                        <Box component="img" src={Image} width="55px" sx={{"borderRadius":"50%","marginRight":"0.5rem"}}/>
+                                        <Box sx={{"display":"flex","flexDirection":"column"}}>
+                                            <Typography component="span">Listed For 6 ETH</Typography>
+                                            <Typography component="span">By Nishant 34 minitus ago</Typography>
+                                        </Box>
+                                    </Box>
+                                </TabPanel>                            
+                            
+                        </Box>
+                    </Grid>
+                </Grid>)
+        )}
       </Container>
   );
 };

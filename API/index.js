@@ -19,6 +19,7 @@ connectDB();
 
 app.use("/nft",require("./routes/nftInfo"));
 app.use("/nft",require("./routes/User"));
+app.use("/collection",require("./routes/Collection"));
 
 app.listen(PORT,()=>{
     console.log(`You are alive at ${PORT}`);
